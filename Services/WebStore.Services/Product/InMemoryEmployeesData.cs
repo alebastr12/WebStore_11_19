@@ -29,6 +29,23 @@ namespace WebStore.Services.Product
             _Employes.Add(employee);
         }
 
+        public Employee Update(int id, Employee employee)
+        {
+            if(employee is null)
+                throw new ArgumentNullException(nameof(employee));
+
+            var db_employee = GetById(id);
+            if(db_employee is null)
+                throw new InvalidOperationException($"Сотрудник с id:{id} не найден");
+
+            db_employee.FirstName = employee.FirstName;
+            db_employee.SurName = employee.SurName;
+            db_employee.Patronymic = employee.Patronymic;
+            db_employee.Age = employee.Age;
+
+            return db_employee;
+        }
+
         public void Delete(int id)
         {
             var employee = GetById(id);
