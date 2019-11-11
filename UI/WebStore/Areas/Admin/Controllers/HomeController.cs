@@ -10,10 +10,7 @@ namespace WebStore.Areas.Admin.Controllers
     {
         private readonly IProductData _ProductData;
 
-        public HomeController(IProductData ProductData)
-        {
-            _ProductData = ProductData;
-        }
+        public HomeController(IProductData ProductData) => _ProductData = ProductData;
 
         public IActionResult Index() => View();
 
