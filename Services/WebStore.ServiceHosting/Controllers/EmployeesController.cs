@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebStore.Domain.Models;
 using WebStore.Interfaces.Services;
 
@@ -15,7 +16,13 @@ namespace WebStore.ServiceHosting.Controllers
     public class EmployeesController : ControllerBase, IEmployeesData
     {
         private readonly IEmployeesData _EmployeesData;
-        public EmployeesController(IEmployeesData EmployeesData) => _EmployeesData = EmployeesData;
+        private readonly ILogger<EmployeesController> _Logger;
+
+        public EmployeesController(IEmployeesData EmployeesData, ILogger<EmployeesController> Logger)
+        {
+            _EmployeesData = EmployeesData;
+            _Logger = Logger;
+        }
 
         [HttpGet, ActionName("Get")]
         public IEnumerable<Employee> GetAll() => _EmployeesData.GetAll();
@@ -24,7 +31,13 @@ namespace WebStore.ServiceHosting.Controllers
         public Employee GetById(int id) => _EmployeesData.GetById(id);
 
         [HttpPost, ActionName("Post")]
-        public void AddNew(Employee employee) => _EmployeesData.AddNew(employee);
+        public void AddNew(Employee employee)
+        {
+            using (_Logger.BeginScope("Добавление нового сотрудника {0}", employee.FirstName))
+            {
+                _EmployeesData.AddNew(employee);
+            }
+        }
 
         [HttpPut("{id}"), ActionName("Put")]
         public Employee Update(int id, [FromBody] Employee employee) => _EmployeesData.Update(id, employee);
