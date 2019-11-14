@@ -39,7 +39,7 @@ namespace WebStore.ServiceHosting
 
             services.AddIdentity<User, IdentityRole>(options =>
                 {
-                    options.Lockout.AllowedForNewUsers = false;
+                    //options.Lockout.AllowedForNewUsers = false;
                     // конфигурация cookies возможна здесь
                 })
                .AddEntityFrameworkStores<WebStoreContext>()
