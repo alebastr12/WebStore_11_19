@@ -15,6 +15,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Database;
 using WebStore.Services.Product;
 
 namespace WebStore.ServiceHosting
@@ -33,6 +34,8 @@ namespace WebStore.ServiceHosting
                     opt.SwaggerDoc("v1", new Info { Title = "WebStore.API", Version = "v1" });
                     //opt.IncludeXmlComments("WebStore.ServiceHosting.xml");
                 });
+
+            services.AddTransient<WebStoreContextInitializer>();
 
             services.AddDbContext<WebStoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConection")));
@@ -54,8 +57,10 @@ namespace WebStore.ServiceHosting
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
         {
+            db.InitializeAsync().Wait();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
