@@ -5,6 +5,7 @@ using WebStore.DAL.Context;
 using WebStore.Domain.DTO.Products;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Map;
 
 namespace WebStore.Services.Product
 {
@@ -32,40 +33,14 @@ namespace WebStore.Services.Product
             if (Filter?.BrandId != null)
                 products = products.Where(product => product.BrandId == Filter.BrandId);
 
-            return products.AsEnumerable().Select(p => new ProductDTO
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Order = p.Order,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                Brand = p.Brand is null ? null : new BrandDTO
-                {
-                    Id = p.Brand.Id,
-                    Name = p.Brand.Name
-                }
-            });
+            return products.AsEnumerable().Select(ProductMapper.ToDTO);
         }
 
-        public ProductDTO GetProductById(int id)
-        {
-            var p = _db.Products
+        public ProductDTO GetProductById(int id) =>
+            _db.Products
                .Include(product => product.Brand)
                .Include(product => product.Section)
-               .FirstOrDefault(product => product.Id == id);
-            return new ProductDTO
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Order = p.Order,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                Brand = p.Brand is null ? null : new BrandDTO
-                {
-                    Id = p.Brand.Id,
-                    Name = p.Brand.Name
-                }
-            };
-        }
+               .FirstOrDefault(product => product.Id == id)
+               .ToDTO();
     }
 }

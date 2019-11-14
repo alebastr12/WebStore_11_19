@@ -4,6 +4,7 @@ using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 using WebStore.Infrastructure.Map;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Map;
 
 namespace WebStore.Controllers
 {
@@ -26,19 +27,7 @@ namespace WebStore.Controllers
                 BrandId = BrandId,
                 SectionId = SectionId,
                 Products = products
-                   .Select(p => new Product
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Order = p.Order,
-                        ImageUrl = p.ImageUrl,
-                        BrandId = p.Brand?.Id,
-                        Brand = p.Brand is null ? null : new Brand
-                        {
-                            Id = p.Brand.Id,
-                            Name = p.Brand.Name
-                        }
-                    })
+                   .Select(ProductMapper.FromDTO)
                    .Select(ProductViewModelMapper.CreateViewModel)
             };
 
