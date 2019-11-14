@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebStore.ServiceHosting</name>
+    </assembly>
+    <members>
+        <member name="T:WebStore.ServiceHosting.Controllers.ProductsController">
+            <summary>Контроллер товаров</summary>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.ProductsController.GetSections">
+            <summary>Получить все секции</summary>
+            <returns>Возвращает список секций базы данных</returns>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.ProductsController.GetBrands">
+            <summary>Получить все бренды</summary>
+            <returns>Возвращает список брендов базы данных</returns>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.ProductsController.GetProducts(WebStore.Domain.Entities.ProductFilter)">
+            <summary>Выборка товаров по заданному фильтром критерию поиска</summary>
+            <param name="Filter">Фильтр - критерий поиска товаров</param>
+            <returns>Список товаров, удовлетворяющий критерию фильтрации</returns>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.ProductsController.GetProductById(System.Int32)">
+            <summary>Получить информацию по товару, заданному своим идентификатором</summary>
+            <param name="id">Идентификатор товара</param>
+            <returns>Информация по товару</returns>
+        </member>
+    </members>
+</doc>

@@ -11,9 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
 using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Database;
 using WebStore.Services.Product;
 
 namespace WebStore.ServiceHosting
@@ -26,11 +28,22 @@ namespace WebStore.ServiceHosting
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(
+                opt =>
+                {
+                    opt.SwaggerDoc("v1", new Info { Title = "WebStore.API", Version = "v1" });
+                    opt.IncludeXmlComments("WebStore.ServiceHosting.xml");
+                    opt.IncludeXmlComments(@"bin\Debug\netcoreapp2.2\WebStore.Domain.xml");
+                });
+
+            services.AddTransient<WebStoreContextInitializer>();
+
             services.AddDbContext<WebStoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConection")));
 
             services.AddIdentity<User, IdentityRole>(options =>
                 {
+                    //options.Lockout.AllowedForNewUsers = false;
                     // конфигурация cookies возможна здесь
                 })
                .AddEntityFrameworkStores<WebStoreContext>()
@@ -45,12 +58,22 @@ namespace WebStore.ServiceHosting
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
         {
+            db.InitializeAsync().Wait();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(
+                opt =>
+                {
+                    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore.API");
+                    opt.RoutePrefix = string.Empty;
+                });
 
             app.UseMvc();
         }
