@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WebStore.DAL.Context;
 using WebStore.Domain.DTO.Identity;
 using WebStore.Domain.Entities;
@@ -17,10 +19,12 @@ namespace WebStore.ServiceHosting.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly ILogger<UsersController> _Logger;
         private readonly UserStore<User> _UserStore;
 
-        public UsersController(WebStoreContext db)
+        public UsersController(WebStoreContext db, ILogger<UsersController> Logger)
         {
+            _Logger = Logger;
             _UserStore = new UserStore<User>(db) { AutoSaveChanges = true };
         }
 
@@ -50,7 +54,25 @@ namespace WebStore.ServiceHosting.Controllers
         [HttpPost("User")]
         public async Task<bool> CreateAsync([FromBody] User user)
         {
-            return (await _UserStore.CreateAsync(user)).Succeeded;
+            if (user is null)
+            {
+                _Logger.LogError("В процессе создания нового пользователя была передана пустая ссылка на объект User");
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            using (_Logger.BeginScope("Создание нового пользователя {0}", user.UserName))
+            {
+                var creation_result = await _UserStore.CreateAsync(user);
+
+                if(creation_result.Succeeded)
+                    _Logger.LogInformation("Пользователь {0} успешно создан", user.UserName);
+                else
+                    _Logger.LogWarning("При создании пользователя {0} возникли ошибки: {1}",
+                        user.UserName,
+                        string.Join(", ", creation_result.Errors.Select(e => e.Description)));
+
+                return creation_result.Succeeded;
+            }
         }
 
         [HttpPut("User")]
