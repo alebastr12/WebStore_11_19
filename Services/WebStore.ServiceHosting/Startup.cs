@@ -32,7 +32,8 @@ namespace WebStore.ServiceHosting
                 opt =>
                 {
                     opt.SwaggerDoc("v1", new Info { Title = "WebStore.API", Version = "v1" });
-                    //opt.IncludeXmlComments("WebStore.ServiceHosting.xml");
+                    opt.IncludeXmlComments("WebStore.ServiceHosting.xml");
+                    opt.IncludeXmlComments(@"bin\Debug\netcoreapp2.2\WebStore.Domain.xml");
                 });
 
             services.AddTransient<WebStoreContextInitializer>();
