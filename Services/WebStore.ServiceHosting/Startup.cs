@@ -15,6 +15,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using WebStore.Logging;
 using WebStore.Services.Database;
 using WebStore.Services.Product;
 
@@ -39,7 +40,7 @@ namespace WebStore.ServiceHosting
             services.AddTransient<WebStoreContextInitializer>();
 
             services.AddDbContext<WebStoreContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>(options =>
                 {
@@ -48,6 +49,22 @@ namespace WebStore.ServiceHosting
                 })
                .AddEntityFrameworkStores<WebStoreContext>()
                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(cfg =>
+            {
+                cfg.Password.RequiredLength = 3;
+                cfg.Password.RequireDigit = false;
+                cfg.Password.RequireLowercase = false;
+                cfg.Password.RequireUppercase = false;
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequiredUniqueChars = 3;
+
+                cfg.Lockout.MaxFailedAccessAttempts = 10;
+                cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                cfg.Lockout.AllowedForNewUsers = true;
+
+                cfg.User.RequireUniqueEmail = false; // грабли!
+            });
 
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             services.AddScoped<IProductData, SqlProductData>();
@@ -58,8 +75,10 @@ namespace WebStore.ServiceHosting
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db, ILoggerFactory log)
         {
+            log.AddLog4Net();
+
             db.InitializeAsync().Wait();
 
             if (env.IsDevelopment())
@@ -74,6 +93,16 @@ namespace WebStore.ServiceHosting
                     opt.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore.API");
                     opt.RoutePrefix = string.Empty;
                 });
+
+            //app.Use(
+            //    async (context, next) =>
+            //    {
+            //        context.Request.Headers.TryGetValue("secure_header", out var header_value);
+            //        if (header_value != "key_value")
+            //            context.Response.StatusCode = 403;
+            //        else
+            //            await next();
+            //    });
 
             app.UseMvc();
         }

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using WebStore.Clients.Base;
 using WebStore.Domain.DTO.Identity;
 using WebStore.Domain.Entities;
@@ -16,7 +17,8 @@ namespace WebStore.Clients.Identity
 {
     public class UsersClient : BaseClient, IUsersClient
     {
-        public UsersClient(IConfiguration config) : base(config, "api/users") { }
+        private readonly ILogger<UsersClient> _Logger;
+        public UsersClient(IConfiguration config, ILogger<UsersClient> Logger) : base(config, "api/users") => _Logger = Logger;
 
         #region Implementation of IUserStore<User>
 
@@ -38,8 +40,16 @@ namespace WebStore.Clients.Identity
 
         public async Task SetUserNameAsync(User user, string name, CancellationToken cancel)
         {
-            user.UserName = name;
-            await PostAsync($"{_ServiceAddress}/UserName/{name}", user, cancel);
+            using (_Logger.BeginScope("Изменение имени пользвоателя через WebAPI для {0}", user.UserName))
+            {
+                var old_name = user.UserName;
+                user.UserName = name;
+                var result = await PostAsync($"{_ServiceAddress}/UserName/{name}", user, cancel);
+                if(result.IsSuccessStatusCode)
+                    _Logger.LogInformation("Имя пользователя {0} успешно изменено на {1}", old_name, name);
+                else
+                    _Logger.LogWarning("Ошибка при запросе к WebAPI изменения имени пользователя");
+            }
         }
 
         public async Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancel)
