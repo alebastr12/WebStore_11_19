@@ -14,6 +14,7 @@ using WebStore.Clients.Values;
 using WebStore.DAL.Context;
 using WebStore.Data;
 using WebStore.Domain.Entities;
+using WebStore.Infrastructure.Middleware;
 using WebStore.Interfaces.Api;
 using WebStore.Interfaces.Services;
 using WebStore.Logging;
@@ -101,6 +102,10 @@ namespace WebStore
             app.UseDefaultFiles();
 
             app.UseAuthentication();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            //app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            //app.UseMiddleware(new ErrorHandlingMiddleware()) // Альтернатива при регистрации промежуточного ПО, которое не требует зависимостей через свой конструктор
 
             //app.UseMvcWithDefaultRoute(); // "default" : "{controller=Home}/{action=Index}/{id?}"
             app.UseMvc(route =>
