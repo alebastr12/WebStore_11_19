@@ -22,6 +22,8 @@ namespace WebStore.Clients.Base
                 BaseAddress = new Uri(config["ClientAddress"])
             };
 
+            //_Client.DefaultRequestHeaders.Add("secure_header", "key_value");
+
             var headers = _Client.DefaultRequestHeaders.Accept;
 
             headers.Clear();

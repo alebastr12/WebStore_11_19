@@ -91,6 +91,16 @@ namespace WebStore.ServiceHosting
                     opt.RoutePrefix = string.Empty;
                 });
 
+            //app.Use(
+            //    async (context, next) =>
+            //    {
+            //        context.Request.Headers.TryGetValue("secure_header", out var header_value);
+            //        if (header_value != "key_value")
+            //            context.Response.StatusCode = 403;
+            //        else
+            //            await next();
+            //    });
+
             app.UseMvc();
         }
     }
