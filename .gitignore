@@ -344,3 +344,5 @@ healthchecksdb
 /UI/WebStore/wwwroot/js/site.min.js
 /UI/WebStore/wwwroot/js/site.min.js.map
 /UI/WebStore/wwwroot/lib
+
+Logs/
