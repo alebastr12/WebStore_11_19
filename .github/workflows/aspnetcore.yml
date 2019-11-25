@@ -21,7 +21,7 @@ jobs:
         dotnet build --configuration Debug
         dotnet test
         
-  build-webstore:
+  publish-webstore:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -34,12 +34,12 @@ jobs:
       with:
         dotnet-version: 2.2.108
     - name: Build with dotnet
-      run: dotnet build --configuration Release UI/WebStore/WebStore.csproj
+      run: dotnet publish --configuration Release UI/WebStore/WebStore.csproj
     
     - uses: actions/upload-artifact@master
       with:
-        name: release-webstore-${{ matrix.os }}
-        path: UI/WebStore/bin/Release
+        name: webstore-${{ matrix.os }}
+        path: UI/WebStore/bin/Release/netcoreapp2.2/publish
 
   build-api:
     runs-on: ${{ matrix.os }}
@@ -54,9 +54,9 @@ jobs:
       with:
         dotnet-version: 2.2.108
     - name: Build with dotnet
-      run: dotnet build --configuration Release Services/WebStore.ServiceHosting/WebStore.ServiceHosting.csproj
+      run: dotnet publish --configuration Release Services/WebStore.ServiceHosting/WebStore.ServiceHosting.csproj
     
     - uses: actions/upload-artifact@master
       with:
-        name: release-api-${{ matrix.os }}
-        path: Services/WebStore.ServiceHosting/bin/Release
+        name: webstore-api-${{ matrix.os }}
+        path: Services/WebStore.ServiceHosting/bin/Release/netcoreapp2.2/publish
