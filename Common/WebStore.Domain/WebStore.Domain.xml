@@ -188,7 +188,7 @@
             <summary>Название</summary>
         </member>
         <member name="P:WebStore.Domain.ViewModels.SectionViewModel.Order">
-            <summary>Порадковый номер</summary>
+            <summary>Порядковый номер</summary>
         </member>
         <member name="P:WebStore.Domain.ViewModels.SectionViewModel.ChildSections">
             <summary>Дочерние секции</summary>
