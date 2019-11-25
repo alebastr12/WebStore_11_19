@@ -11,12 +11,17 @@
   <ItemGroup>
     <Compile Remove="Areas\Admin\Data\**" />
     <Compile Remove="Areas\Admin\Models\**" />
+    <Compile Remove="Logs\**" />
     <Content Remove="Areas\Admin\Data\**" />
     <Content Remove="Areas\Admin\Models\**" />
+    <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Areas\Admin\Data\**" />
     <EmbeddedResource Remove="Areas\Admin\Models\**" />
+    <EmbeddedResource Remove="Logs\**" />
     <None Remove="Areas\Admin\Data\**" />
     <None Remove="Areas\Admin\Models\**" />
+    <None Remove="Logs\**" />
+    <TypeScriptCompile Remove="Logs\**" />
   </ItemGroup>
 
   <ItemGroup>
