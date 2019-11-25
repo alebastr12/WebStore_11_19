@@ -24,10 +24,16 @@ namespace WebStore.ServiceHosting.Controllers
         [HttpGet("sections")]
         public IEnumerable<Section> GetSections() => _ProductData.GetSections();
 
+        [HttpGet("sections/{id}")]
+        public Section GetSectionById(int id) => _ProductData.GetSectionById(id);
+
         /// <summary>Получить все бренды</summary>
         /// <returns>Возвращает список брендов базы данных</returns>
         [HttpGet("brands")]
         public IEnumerable<Brand> GetBrands() => _ProductData.GetBrands();
+
+        [HttpGet("brands/{id}")]
+        public Brand GetBrandById(int id) => _ProductData.GetBrandById(id);
 
         /// <summary>Выборка товаров по заданному фильтром критерию поиска</summary>
         /// <param name="Filter">Фильтр - критерий поиска товаров</param>

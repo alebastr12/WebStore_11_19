@@ -25,6 +25,9 @@
         <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Brand">
             <summary>Бренд товара</summary>
         </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Section">
+            <summary>Секция товара</summary>
+        </member>
         <member name="T:WebStore.Domain.Entities.Base.BaseEntity">
             <summary>Сущность</summary>
         </member>

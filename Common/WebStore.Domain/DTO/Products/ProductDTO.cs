@@ -18,5 +18,8 @@ namespace WebStore.Domain.DTO.Products
 
         /// <summary>Бренд товара</summary>
         public BrandDTO Brand { get; set; }
+
+        /// <summary>Секция товара</summary>
+        public SectionDTO Section { get; set; }
     }
 }

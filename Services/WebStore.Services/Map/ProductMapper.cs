@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WebStore.Domain.DTO.Products;
+﻿using WebStore.Domain.DTO.Products;
 
 namespace WebStore.Services.Map
 {
@@ -16,7 +13,8 @@ namespace WebStore.Services.Map
                 ImageUrl = product.ImageUrl,
                 Price = product.Price,
                 Order = product.Order,
-                Brand = product.Brand.ToDTO()
+                Brand = product.Brand.ToDTO(),
+                Section = product.Section.ToDTO()
             };
 
         public static Domain.Entities.Product FromDTO(this ProductDTO product) => product is null
@@ -29,7 +27,9 @@ namespace WebStore.Services.Map
                 Price = product.Price,
                 Order = product.Order,
                 BrandId = product.Brand?.Id,
-                Brand = product.Brand.FromDTO()
+                Brand = product.Brand.FromDTO(),
+                SectionId = product.Section.Id,
+                Section = product.Section.FromDTO(),
             };
     }
 }
