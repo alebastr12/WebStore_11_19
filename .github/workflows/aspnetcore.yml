@@ -1,35 +1,32 @@
-name: ASP.NET Core Build
+name: ASP.NET Core CI
 
-on:
-  push:
-    branches: 
-      - master
+on: [push]
 
 jobs:
-  tests:
+  test:
     name: Test on .NET Core for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-    steps:
-      - uses: actions/checkout@v1
-      - name: Use .NET 2.2.108
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 2.2.108 
-      - name: dotnet build and test
-        run: |
-          dotnet build --configuration Debug
-          dotnet test        
-     
-  build-webstore:
 
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use .NET 2.2.108
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.108
+    - name: dotnet build and test
+      run: |
+        dotnet build --configuration Debug
+        dotnet test
+        
+  build-webstore:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-      
+
     steps:
     - uses: actions/checkout@v1
     - name: Setup .NET Core
@@ -39,18 +36,17 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release UI/WebStore/WebStore.csproj
     
-    - uses: actions/uploader-artifact@master
+    - uses: actions/upload-artifact@master
       with:
         name: release-webstore-${{ matrix.os }}
         path: UI/WebStore/bin/Release
 
-  build-web-api:
-
+  build-api:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-      
+
     steps:
     - uses: actions/checkout@v1
     - name: Setup .NET Core
@@ -60,7 +56,7 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release Services/WebStore.ServiceHosting/WebStore.ServiceHosting.csproj
     
-    - uses: actions/uploader-artifact@master
+    - uses: actions/upload-artifact@master
       with:
-        name: release-webstore-${{ matrix.os }}
+        name: release-api-${{ matrix.os }}
         path: Services/WebStore.ServiceHosting/bin/Release
