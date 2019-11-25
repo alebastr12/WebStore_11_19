@@ -12,7 +12,7 @@ namespace WebStore.Domain.ViewModels
         /// <summary>Название</summary>
         public string Name { get; set; }
 
-        /// <summary>Порадковый номер</summary>
+        /// <summary>Порядковый номер</summary>
         public int Order { get; set; }
 
         /// <summary>Дочерние секции</summary>

@@ -25,6 +25,9 @@
         <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Brand">
             <summary>Бренд товара</summary>
         </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Section">
+            <summary>Секция товара</summary>
+        </member>
         <member name="T:WebStore.Domain.Entities.Base.BaseEntity">
             <summary>Сущность</summary>
         </member>
@@ -188,7 +191,7 @@
             <summary>Название</summary>
         </member>
         <member name="P:WebStore.Domain.ViewModels.SectionViewModel.Order">
-            <summary>Порадковый номер</summary>
+            <summary>Порядковый номер</summary>
         </member>
         <member name="P:WebStore.Domain.ViewModels.SectionViewModel.ChildSections">
             <summary>Дочерние секции</summary>

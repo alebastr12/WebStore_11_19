@@ -19,13 +19,19 @@ namespace WebStore.Services.Product
             //.Include(s => s.Products)                             // Грабли
             .AsEnumerable();
 
+        public Section GetSectionById(int id) => _db.Sections.FirstOrDefault(s => s.Id == id);
+
         public IEnumerable<Brand> GetBrands() => _db.Brands
             //.Include(brand => brand.Products)                     // Грабли
             .AsEnumerable();
 
+        public Brand GetBrandById(int id) => _db.Brands.FirstOrDefault(b => b.Id == id);
+
         public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter)
         {
-            IQueryable<Domain.Entities.Product> products = _db.Products;
+            IQueryable<Domain.Entities.Product> products = _db.Products
+               .Include(p => p.Brand)
+               .Include(p => p.Section);
 
             if (Filter?.SectionId != null)
                 products = products.Where(product => product.SectionId == Filter.SectionId);
