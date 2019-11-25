@@ -106,6 +106,11 @@ namespace WebStore.Tests.Controllers
                         {
                             Id = 1,
                             Name = "Brand of product 1"
+                        },
+                        Section = new SectionDTO
+                        {
+                            Id = 1,
+                            Name = "Products section id 1"
                         }
                     },
                     new ProductDTO
@@ -119,6 +124,11 @@ namespace WebStore.Tests.Controllers
                         {
                             Id = 1,
                             Name = "Brand of product 2"
+                        },
+                        Section = new SectionDTO
+                        {
+                            Id = 1,
+                            Name = "Products section id 1"
                         }
                     }
                 });
