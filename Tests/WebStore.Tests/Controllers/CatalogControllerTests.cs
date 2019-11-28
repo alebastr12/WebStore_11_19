@@ -145,6 +145,9 @@ namespace WebStore.Tests.Controllers
                 });
 
             var configuration_mock = new Mock<Microsoft.Extensions.Configuration.IConfiguration>();
+            configuration_mock
+               .Setup(c => c["PageSize"])
+               .Returns("3");
 
             var controller = new CatalogController(product_data_mock.Object, configuration_mock.Object);
 
