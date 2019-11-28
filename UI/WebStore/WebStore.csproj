@@ -51,6 +51,6 @@
     <ProjectReference Include="..\..\Services\WebStore.Services\WebStore.Services.csproj" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties bundleconfig_1json__JsonSchema="" appsettings_1json__JsonSchema="http://json.schemastore.org/bootstraprc" libman_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties bundleconfig_1json__JsonSchema="" appsettings_1json__JsonSchema="" libman_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
