@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    name: Test on .NET Core for ${{ matrix.os }}
+    name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -13,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       
-      - name: Use .NET 3.0.100
+      - name: Use .NET 2.2.108
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.0.100
+          dotnet-version: 2.2.108
           
       - name: Building
         run: dotnet build --nologo --configuration Debug
