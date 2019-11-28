@@ -26,7 +26,7 @@ namespace WebStore.Controllers
             {
                 BrandId = BrandId,
                 SectionId = SectionId,
-                Products = products
+                Products = products.Products
                    .Select(ProductMapper.FromDTO)
                    .Select(ProductViewModelMapper.CreateViewModel)
             };

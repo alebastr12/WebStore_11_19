@@ -27,7 +27,7 @@ namespace WebStore.Services.Product
 
         public Brand GetBrandById(int id) => _db.Brands.FirstOrDefault(b => b.Id == id);
 
-        public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter)
+        public PagedProductDTO GetProducts(ProductFilter Filter)
         {
             IQueryable<Domain.Entities.Product> products = _db.Products
                .Include(p => p.Brand)
@@ -39,7 +39,20 @@ namespace WebStore.Services.Product
             if (Filter?.BrandId != null)
                 products = products.Where(product => product.BrandId == Filter.BrandId);
 
-            return products.AsEnumerable().Select(ProductMapper.ToDTO);
+            var total_count = products.Count();
+
+            if (Filter?.PageSize != null)
+                products = products
+                   .Skip((Filter.Page - 1) * (int) Filter.PageSize)
+                   .Take((int) Filter.PageSize);
+
+            return new PagedProductDTO
+            {
+                Products = products
+                   .AsEnumerable()
+                   .Select(ProductMapper.ToDTO),
+                TotalCount = total_count
+            };
         }
 
         public ProductDTO GetProductById(int id) =>
