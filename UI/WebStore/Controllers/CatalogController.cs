@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 using WebStore.Infrastructure.Map;
@@ -11,24 +12,39 @@ namespace WebStore.Controllers
     public class CatalogController : Controller
     {
         private readonly IProductData _ProductData;
+        private readonly IConfiguration _Configuration;
 
-        public CatalogController(IProductData ProductData) => _ProductData = ProductData;
-
-        public IActionResult Shop(int? SectionId, int? BrandId)
+        public CatalogController(IProductData ProductData, IConfiguration Configuration)
         {
+            _ProductData = ProductData;
+            _Configuration = Configuration;
+        }
+
+        public IActionResult Shop(int? SectionId, int? BrandId, int Page = 1)
+        {
+            var page_size = int.Parse(_Configuration["PageSize"]);
+
             var products = _ProductData.GetProducts(new ProductFilter
             {
                 SectionId = SectionId,
-                BrandId = BrandId
+                BrandId = BrandId,
+                Page = Page,
+                PageSize = page_size
             });
 
             var catalog_model = new CatalogViewModel
             {
                 BrandId = BrandId,
                 SectionId = SectionId,
-                Products = products
+                Products = products.Products
                    .Select(ProductMapper.FromDTO)
-                   .Select(ProductViewModelMapper.CreateViewModel)
+                   .Select(ProductViewModelMapper.CreateViewModel),
+                PageViewModel = new PageViewModel
+                {
+                    PageSize = page_size,
+                    PageNumber = Page,
+                    TotalItems = products.TotalCount
+                }
             };
 
             return View(catalog_model);

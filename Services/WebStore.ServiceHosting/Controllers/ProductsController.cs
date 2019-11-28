@@ -39,7 +39,7 @@ namespace WebStore.ServiceHosting.Controllers
         /// <param name="Filter">Фильтр - критерий поиска товаров</param>
         /// <returns>Список товаров, удовлетворяющий критерию фильтрации</returns>
         [HttpPost, ActionName("Post")]
-        public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter) => _ProductData.GetProducts(Filter);
+        public PagedProductDTO GetProducts(ProductFilter Filter) => _ProductData.GetProducts(Filter);
 
         /// <summary>Получить информацию по товару, заданному своим идентификатором</summary>
         /// <param name="id">Идентификатор товара</param>

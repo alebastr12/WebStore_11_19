@@ -4,6 +4,15 @@
         <name>WebStore.Domain</name>
     </assembly>
     <members>
+        <member name="T:WebStore.Domain.DTO.Products.PagedProductDTO">
+            <summary>одна страница товаров каталога</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.PagedProductDTO.Products">
+            <summary>Товары страницы</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.PagedProductDTO.TotalCount">
+            <summary>Полное количество товаров в каталоге</summary>
+        </member>
         <member name="T:WebStore.Domain.DTO.Products.ProductDTO">
             <summary>Информация по товару</summary>
         </member>
