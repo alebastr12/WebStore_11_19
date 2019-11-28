@@ -19,7 +19,7 @@ jobs:
           dotnet-version: 2.2.108
           
       - name: Building
-        run: dotnet build --nologo --configuration Debug
+        run: dotnet build --configuration Debug
           
       - name: Run Tests
-        run: dotnet test --nologo
+        run: dotnet test
