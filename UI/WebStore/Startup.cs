@@ -14,6 +14,7 @@ using WebStore.Clients.Values;
 using WebStore.DAL.Context;
 using WebStore.Data;
 using WebStore.Domain.Entities;
+using WebStore.Hubs;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Interfaces.Api;
 using WebStore.Interfaces.Services;
@@ -30,6 +31,8 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+
             services.AddSingleton<IEmployeesData, EmployeesClient>();
             services.AddScoped<IProductData, ProductsClient>();
             services.AddScoped<IOrderService, OrdersClient>();
@@ -107,6 +110,8 @@ namespace WebStore
             app.UseMiddleware<ErrorHandlingMiddleware>();
             //app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             //app.UseMiddleware(new ErrorHandlingMiddleware()) // Альтернатива при регистрации промежуточного ПО, которое не требует зависимостей через свой конструктор
+
+            app.UseSignalR(route => route.MapHub<InformationHub>("/info"));
 
             //app.UseMvcWithDefaultRoute(); // "default" : "{controller=Home}/{action=Index}/{id?}"
             app.UseMvc(route =>
