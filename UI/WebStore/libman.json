@@ -56,6 +56,10 @@
     {
       "library": "prettyPhoto@3.1.6",
       "destination": "wwwroot/lib/prettyPhoto/"
+    },
+    {
+      "library": "jquery-loading-overlay@2.1.6",
+      "destination": "wwwroot/lib/jquery-loading-overlay/"
     }
   ]
 }

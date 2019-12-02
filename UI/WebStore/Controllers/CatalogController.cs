@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebStore.Domain.Entities;
@@ -20,9 +21,10 @@ namespace WebStore.Controllers
             _Configuration = Configuration;
         }
 
+        private const string __PageSize = "PageSize";
         public IActionResult Shop(int? SectionId, int? BrandId, int Page = 1)
         {
-            var page_size = int.Parse(_Configuration["PageSize"]);
+            var page_size = int.Parse(_Configuration[__PageSize]);
 
             var products = _ProductData.GetProducts(new ProductFilter
             {
@@ -65,6 +67,33 @@ namespace WebStore.Controllers
                     ImageUrl = product.ImageUrl,
                     Brand = product.Brand?.Name
                 });
+        }
+
+        public IActionResult GetFiltredItems(int? SectionId, int? BrandId, int Page = 1)
+        {
+            var products = GetProducts(SectionId, BrandId, Page);
+            return PartialView("Partial/_FeaturesItems", products);
+        }
+
+        private IEnumerable<ProductViewModel> GetProducts(int? SectionId, int? BrandId, int Page)
+        {
+            var products_model = _ProductData.GetProducts(new ProductFilter
+            {
+                SectionId = SectionId,
+                BrandId = BrandId,
+                Page = Page,
+                PageSize = int.Parse(_Configuration[__PageSize])
+            });
+
+            return products_model.Products.Select(p => new ProductViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Order = p.Order,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand?.Name ?? string.Empty
+            });
         }
     }
 }
