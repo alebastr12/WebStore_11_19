@@ -19,6 +19,13 @@ namespace WebStore.Controllers
             _SignInManager = SignInManager;
         }
 
+        public async Task<IActionResult> IsNameFree(string UserName)
+        {
+            var user = await _UserManager.FindByNameAsync(UserName);
+            if (user is null) return Json("true");
+            return Json($"Имя пользователя \"{UserName}\" уже используется");
+        }
+
         public IActionResult Register() => View();
 
         [HttpPost, ValidateAntiForgeryToken]

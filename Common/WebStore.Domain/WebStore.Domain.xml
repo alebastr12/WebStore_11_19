@@ -182,7 +182,7 @@
             <summary>Модель-представления регистрации пользователя в системе</summary>
         </member>
         <member name="P:WebStore.Domain.ViewModels.RegistrerUserViewModel.UserName">
-            <summary>Имя пользвоателя</summary>
+            <summary>Имя пользователя</summary>
         </member>
         <member name="P:WebStore.Domain.ViewModels.RegistrerUserViewModel.Password">
             <summary>Пароль</summary>
