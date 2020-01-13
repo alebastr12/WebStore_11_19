@@ -1,4 +1,4 @@
-jQuery(function($) {
+﻿jQuery(function($) {
 	var form = $('.contact-form');
 	form.submit(function () {
 		$this = $(this);
