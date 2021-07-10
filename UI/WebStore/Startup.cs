@@ -5,15 +5,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using WebStore.Clients.Employees;
+using WebStore.Clients.Identity;
 using WebStore.Clients.Orders;
 using WebStore.Clients.Products;
 using WebStore.Clients.Values;
 using WebStore.DAL.Context;
 using WebStore.Data;
 using WebStore.Domain.Entities;
+using WebStore.Hubs;
+using WebStore.Infrastructure.Middleware;
 using WebStore.Interfaces.Api;
 using WebStore.Interfaces.Services;
+using WebStore.Logging;
 using WebStore.Services.Product;
 
 namespace WebStore
@@ -26,25 +31,15 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WebStoreContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConection")));
-
-            services.AddTransient<WebStoreContextInitializer>();
+            services.AddSignalR();
 
             services.AddSingleton<IEmployeesData, EmployeesClient>();
-            //services.AddSingleton<IProductData, InMemoryProductData>();
             services.AddScoped<IProductData, ProductsClient>();
             services.AddScoped<IOrderService, OrdersClient>();
-            services.AddScoped<ICartService, CookieCartService>();
+            services.AddScoped<ICartStore, CookiesCartStore>();
+            services.AddScoped<ICartService, CartService>();
 
             services.AddScoped<IValuesService, ValuesClient>();
-
-            services.AddIdentity<User, IdentityRole>(options =>
-                {
-                    // конфигурация cookies возможна здесь
-                })
-                .AddEntityFrameworkStores<WebStoreContext>()
-                .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(cfg =>
             {
@@ -62,6 +57,24 @@ namespace WebStore
                 cfg.User.RequireUniqueEmail = false; // грабли!
             });
 
+            services.AddIdentity<User, IdentityRole>().AddDefaultTokenProviders();
+
+            #region Custom identity implementation
+
+            services.AddTransient<IUserStore<User>, UsersClient>();
+            services.AddTransient<IUserRoleStore<User>, UsersClient>();
+            services.AddTransient<IUserClaimStore<User>, UsersClient>();
+            services.AddTransient<IUserPasswordStore<User>, UsersClient>();
+            services.AddTransient<IUserEmailStore<User>, UsersClient>();
+            services.AddTransient<IUserPhoneNumberStore<User>, UsersClient>();
+            services.AddTransient<IUserTwoFactorStore<User>, UsersClient>();
+            services.AddTransient<IUserLoginStore<User>, UsersClient>();
+            services.AddTransient<IUserLockoutStore<User>, UsersClient>();
+
+            services.AddTransient<IRoleStore<IdentityRole>, RolesClient>();
+
+            #endregion
+
             services.ConfigureApplicationCookie(cfg =>
             {
                 cfg.Cookie.HttpOnly = true;
@@ -78,9 +91,9 @@ namespace WebStore
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log)
         {
-            db.InitializeAsync().Wait();
+            log.AddLog4Net();
 
             if (env.IsDevelopment())
             {
@@ -93,6 +106,12 @@ namespace WebStore
             app.UseDefaultFiles();
 
             app.UseAuthentication();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            //app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            //app.UseMiddleware(new ErrorHandlingMiddleware()) // Альтернатива при регистрации промежуточного ПО, которое не требует зависимостей через свой конструктор
+
+            app.UseSignalR(route => route.MapHub<InformationHub>("/info"));
 
             //app.UseMvcWithDefaultRoute(); // "default" : "{controller=Home}/{action=Index}/{id?}"
             app.UseMvc(route =>

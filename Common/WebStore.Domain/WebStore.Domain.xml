@@ -1,0 +1,212 @@
+﻿<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebStore.Domain</name>
+    </assembly>
+    <members>
+        <member name="T:WebStore.Domain.DTO.Products.PagedProductDTO">
+            <summary>одна страница товаров каталога</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.PagedProductDTO.Products">
+            <summary>Товары страницы</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.PagedProductDTO.TotalCount">
+            <summary>Полное количество товаров в каталоге</summary>
+        </member>
+        <member name="T:WebStore.Domain.DTO.Products.ProductDTO">
+            <summary>Информация по товару</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Id">
+            <summary>Идентификатор товара</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Name">
+            <summary>Название</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Order">
+            <summary>Порядковый номер сортировки</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Price">
+            <summary>Цена</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.ImageUrl">
+            <summary>Ссылка на изображение</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Brand">
+            <summary>Бренд товара</summary>
+        </member>
+        <member name="P:WebStore.Domain.DTO.Products.ProductDTO.Section">
+            <summary>Секция товара</summary>
+        </member>
+        <member name="T:WebStore.Domain.Entities.Base.BaseEntity">
+            <summary>Сущность</summary>
+        </member>
+        <member name="T:WebStore.Domain.Entities.Base.Interfaces.IBaseEntity">
+            <summary>Сущность</summary>
+        </member>
+        <member name="P:WebStore.Domain.Entities.Base.Interfaces.IBaseEntity.Id">
+            <summary>Идентификатор</summary>
+        </member>
+        <member name="T:WebStore.Domain.Entities.Base.Interfaces.INamedEntity">
+            <summary>Именованная сущность</summary>
+        </member>
+        <member name="P:WebStore.Domain.Entities.Base.Interfaces.INamedEntity.Name">
+            <summary>Имя</summary>
+        </member>
+        <member name="T:WebStore.Domain.Entities.Base.Interfaces.IOrderedEntity">
+            <summary>Упорядочиваемая сущность</summary>
+        </member>
+        <member name="P:WebStore.Domain.Entities.Base.Interfaces.IOrderedEntity.Order">
+            <summary>Порядок</summary>
+        </member>
+        <member name="T:WebStore.Domain.Entities.Base.NamedEntity">
+            <summary>Именованная сущность</summary>
+        </member>
+        <member name="T:WebStore.Domain.Entities.Brand">
+            <summary>Бренд</summary>
+        </member>
+        <member name="T:WebStore.Domain.Entities.Section">
+            <summary>Секция товаров</summary>
+        </member>
+        <member name="P:WebStore.Domain.Entities.Section.ParentId">
+            <summary>Идентификатор родительской секции</summary>
+        </member>
+        <member name="T:WebStore.Domain.Models.Cart">
+            <summary>Корзина</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.Cart.Items">
+            <summary>Записи корзины</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.Cart.ItemsCount">
+            <summary>Общее количество товара</summary>
+        </member>
+        <member name="T:WebStore.Domain.Models.CartItem">
+            <summary>Запись в корзине</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.CartItem.ProductId">
+            <summary>Идентификатор товара</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.CartItem.Quantity">
+            <summary>Количество</summary>
+        </member>
+        <member name="T:WebStore.Domain.Models.Employee">
+            <summary>Сотрудник</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.Employee.Id">
+            <summary>Идентификатор сотрудника</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.Employee.SurName">
+            <summary>Фамилия</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.Employee.FirstName">
+            <summary>Имя</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.Employee.Patronymic">
+            <summary>Отчество</summary>
+        </member>
+        <member name="P:WebStore.Domain.Models.Employee.Age">
+            <summary>Возраст</summary>
+        </member>
+        <member name="T:WebStore.Domain.ViewModels.BrandViewModel">
+            <summary>Модель-представления бренда</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.BrandViewModel.Id">
+            <summary>Идентификатор</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.BrandViewModel.Name">
+            <summary>Название</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.BrandViewModel.Order">
+            <summary>Порядковый номер</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.BrandViewModel.ProductsCount">
+            <summary>Количество товара</summary>
+        </member>
+        <member name="T:WebStore.Domain.ViewModels.CartViewModel">
+            <summary>Модель-представления корзины</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.CartViewModel.Items">
+            <summary>Элементы корзины</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.CartViewModel.ItemsCount">
+            <summary>Полное количество товара</summary>
+        </member>
+        <member name="T:WebStore.Domain.ViewModels.LoginViewModel">
+            <summary>Модель входа пользователя на сайт</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.LoginViewModel.UserName">
+            <summary>Имя пользователя</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.LoginViewModel.Password">
+            <summary>Пароль</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.LoginViewModel.RememberMe">
+            <summary>Запомнить ли?</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.LoginViewModel.ReturnUrl">
+            <summary>Куда перенаправить в случае успеха?</summary>
+        </member>
+        <member name="T:WebStore.Domain.ViewModels.OrderViewModel">
+            <summary>Модель-представления заказа</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.OrderViewModel.Name">
+            <summary>Название</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.OrderViewModel.Phone">
+            <summary>Телефон</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.OrderViewModel.Address">
+            <summary>Адрес</summary>
+        </member>
+        <member name="T:WebStore.Domain.ViewModels.ProductViewModel">
+            <summary>Модель-представления товара</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.ProductViewModel.Id">
+            <summary>Идентификатор</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.ProductViewModel.Name">
+            <summary>Название</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.ProductViewModel.Order">
+            <summary>Порядковый номер</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.ProductViewModel.ImageUrl">
+            <summary>Ссылка на изображение</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.ProductViewModel.Price">
+            <summary>Цена</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.ProductViewModel.Brand">
+            <summary>Бренд</summary>
+        </member>
+        <member name="T:WebStore.Domain.ViewModels.RegistrerUserViewModel">
+            <summary>Модель-представления регистрации пользователя в системе</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.RegistrerUserViewModel.UserName">
+            <summary>Имя пользователя</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.RegistrerUserViewModel.Password">
+            <summary>Пароль</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.RegistrerUserViewModel.ConfirmPassword">
+            <summary>Подтверждение пароля</summary>
+        </member>
+        <member name="T:WebStore.Domain.ViewModels.SectionViewModel">
+            <summary>Модель-представления секции</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.SectionViewModel.Id">
+            <summary>Идентификатор</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.SectionViewModel.Name">
+            <summary>Название</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.SectionViewModel.Order">
+            <summary>Порядковый номер</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.SectionViewModel.ChildSections">
+            <summary>Дочерние секции</summary>
+        </member>
+        <member name="P:WebStore.Domain.ViewModels.SectionViewModel.ParentSection">
+            <summary>Родительская секция</summary>
+        </member>
+    </members>
+</doc>

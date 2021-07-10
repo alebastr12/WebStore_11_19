@@ -1,6 +1,7 @@
 ﻿@model WebStore.Domain.ViewModels.ProductViewModel
 @{
     ViewData["Title"] = $"Товар {Model.Name}";
+    Layout = "_LayoutBreadCrumbs";
 }
 
 <section>
@@ -61,10 +62,12 @@
                                 <span>@Model.Price.ToString("C")</span>
                                 <label>Количество:</label>
                                 <input type="text" value="3" />
-                                <button type="button" class="btn btn-fefault cart">
+                                <a href="#" 
+                                   class="btn btn-default cart add-to-cart"
+                                   data-id="@Model.Id">
                                     <i class="fa fa-shopping-cart"></i>
                                     Добавить в корзину
-                                </button>
+                                </a>
                             </span>
                             <p><b>Доступность:</b> На складе</p>
                             <p><b>Состояние:</b> Новый</p>
@@ -73,10 +76,6 @@
                         </div><!--/product-information-->
                     </div>
                 </div><!--/product-details-->
-
-                @*@await Html.PartialAsync("Partial/_CategoryTab")*@
-
-                @*@await Html.PartialAsync("PArtial/_RecomendedItems")*@
             </div>
         </div>
     </div>

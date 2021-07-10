@@ -5,6 +5,7 @@ using WebStore.DAL.Context;
 using WebStore.Domain.DTO.Products;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Map;
 
 namespace WebStore.Services.Product
 {
@@ -18,13 +19,19 @@ namespace WebStore.Services.Product
             //.Include(s => s.Products)                             // Грабли
             .AsEnumerable();
 
+        public Section GetSectionById(int id) => _db.Sections.FirstOrDefault(s => s.Id == id);
+
         public IEnumerable<Brand> GetBrands() => _db.Brands
             //.Include(brand => brand.Products)                     // Грабли
             .AsEnumerable();
 
-        public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter)
+        public Brand GetBrandById(int id) => _db.Brands.FirstOrDefault(b => b.Id == id);
+
+        public PagedProductDTO GetProducts(ProductFilter Filter)
         {
-            IQueryable<Domain.Entities.Product> products = _db.Products;
+            IQueryable<Domain.Entities.Product> products = _db.Products
+               .Include(p => p.Brand)
+               .Include(p => p.Section);
 
             if (Filter?.SectionId != null)
                 products = products.Where(product => product.SectionId == Filter.SectionId);
@@ -32,40 +39,27 @@ namespace WebStore.Services.Product
             if (Filter?.BrandId != null)
                 products = products.Where(product => product.BrandId == Filter.BrandId);
 
-            return products.AsEnumerable().Select(p => new ProductDTO
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Order = p.Order,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                Brand = p.Brand is null ? null : new BrandDTO
-                {
-                    Id = p.Brand.Id,
-                    Name = p.Brand.Name
-                }
-            });
-        }
+            var total_count = products.Count();
 
-        public ProductDTO GetProductById(int id)
-        {
-            var p = _db.Products
-               .Include(product => product.Brand)
-               .Include(product => product.Section)
-               .FirstOrDefault(product => product.Id == id);
-            return new ProductDTO
+            if (Filter?.PageSize != null)
+                products = products
+                   .Skip((Filter.Page - 1) * (int) Filter.PageSize)
+                   .Take((int) Filter.PageSize);
+
+            return new PagedProductDTO
             {
-                Id = p.Id,
-                Name = p.Name,
-                Order = p.Order,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                Brand = p.Brand is null ? null : new BrandDTO
-                {
-                    Id = p.Brand.Id,
-                    Name = p.Brand.Name
-                }
+                Products = products
+                   .AsEnumerable()
+                   .Select(ProductMapper.ToDTO),
+                TotalCount = total_count
             };
         }
+
+        public ProductDTO GetProductById(int id) =>
+            _db.Products
+               .Include(product => product.Brand)
+               .Include(product => product.Section)
+               .FirstOrDefault(product => product.Id == id)
+               .ToDTO();
     }
 }

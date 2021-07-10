@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WebStore.DAL.Context;
 using WebStore.DAL.Data;
 using WebStore.Domain.Entities;
@@ -12,16 +15,19 @@ namespace WebStore.Services.Database
         private readonly WebStoreContext _db;
         private readonly UserManager<User> _UserManager;
         private readonly RoleManager<IdentityRole> _RoleManager;
+        private readonly ILogger<WebStoreContextInitializer> _Logger;
 
         public WebStoreContextInitializer(
             WebStoreContext db, 
             UserManager<User> UserManager, 
-            RoleManager<IdentityRole> RoleManager)
+            RoleManager<IdentityRole> RoleManager,
+            ILogger<WebStoreContextInitializer> Logger)
         {
             _db = db;
 
             _UserManager = UserManager;
             _RoleManager = RoleManager;
+            _Logger = Logger;
         }
 
         public async Task InitializeAsync()
@@ -72,10 +78,32 @@ namespace WebStore.Services.Database
         private async Task InitializeIdentityAsync()
         {
             if (!await _RoleManager.RoleExistsAsync(User.RoleUser))
-                await _RoleManager.CreateAsync(new IdentityRole(User.RoleUser));
+            {
+                _Logger.LogInformation("Роль пользователя отсутствует в БД");
+                var result = await _RoleManager.CreateAsync(new IdentityRole(User.RoleUser));
+                if(result.Succeeded)
+                    _Logger.LogInformation("Роль пользователя успешно добавлена в БД");
+                else
+                {
+                    var msg = string.Join(", ", result.Errors.Select(e => e.Description));
+                    _Logger.LogError("Ошибка при добавлении роли пользователя {0}", msg);
+                    throw new InvalidOperationException($"Ошибка при инициализации роли пользователя: {msg}");
+                }
+            }
 
             if (!await _RoleManager.RoleExistsAsync(User.RoleAdmin))
-                await _RoleManager.CreateAsync(new IdentityRole(User.RoleAdmin));
+            {
+                _Logger.LogInformation("Роль администратора отсутствует в БД");
+                var result = await _RoleManager.CreateAsync(new IdentityRole(User.RoleAdmin));
+                if (result.Succeeded)
+                    _Logger.LogInformation("Роль администратора успешно добавлена в БД");
+                else
+                {
+                    var msg = string.Join(", ", result.Errors.Select(e => e.Description));
+                    _Logger.LogError("Ошибка при добавлении роли администратора {0}", msg);
+                    throw new InvalidOperationException($"Ошибка при инициализации роли администратора: {msg}");
+                }
+            }
 
             if (await _UserManager.FindByNameAsync(User.AdminUserName) == null)
             {
